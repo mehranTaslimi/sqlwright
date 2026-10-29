@@ -1,6 +1,24 @@
 [package]
 name = "sqlwright"
-version = "0.1.0"
-edition = "2024"
+description = "Drizzle-style, type-safe SQL query builder on top of sqlx"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+default = []
+postgres = ["dep:sqlwright-postgres"]
+
+[[example]]
+name = "macro_demo"
+required-features = ["postgres"]
 
 [dependencies]
+sqlwright-core.workspace = true
+sqlwright-macros.workspace = true
+sqlwright-postgres = { workspace = true, optional = true }
+
+[lints]
+workspace = true

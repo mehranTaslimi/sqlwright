@@ -23,7 +23,7 @@ thiserror = "2"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
-missing_docs = "warn"
+missing_docs = "allow"
 unreachable_pub = "warn"
 
 [workspace.lints.clippy]

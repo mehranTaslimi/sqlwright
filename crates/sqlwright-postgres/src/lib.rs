@@ -1,14 +1,16 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use sqlwright_core::types::{BigInt, Bool, Double, Int, Real, SmallInt, Text};
+use sqlwright_core::{Backend, HasSqlType};
+#[derive(Debug, Clone, Copy, Default)]
+pub struct Pg;
+
+impl Backend for Pg {
+    type Database = sqlx::Postgres;
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+impl HasSqlType<Bool> for Pg {}
+impl HasSqlType<SmallInt> for Pg {}
+impl HasSqlType<Int> for Pg {}
+impl HasSqlType<BigInt> for Pg {}
+impl HasSqlType<Real> for Pg {}
+impl HasSqlType<Double> for Pg {}
+impl HasSqlType<Text> for Pg {}

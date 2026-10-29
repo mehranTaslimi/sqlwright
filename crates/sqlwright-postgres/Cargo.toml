@@ -1,6 +1,15 @@
 [package]
 name = "sqlwright-postgres"
-version = "0.1.0"
-edition = "2024"
+description = "PostgreSQL backend for sqlwright"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
 
 [dependencies]
+sqlwright-core.workspace = true
+sqlx = { workspace = true, features = ["postgres"] }
+
+[lints]
+workspace = true

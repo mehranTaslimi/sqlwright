@@ -1,6 +1,21 @@
 [package]
 name = "sqlwright-macros"
-version = "0.1.0"
-edition = "2024"
+description = "Procedural macros for sqlwright"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+proc-macro = true
 
 [dependencies]
+sqlwright-core.workspace = true
+
+syn.workspace = true
+quote.workspace = true
+proc-macro2.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,30 @@
+# Rust build output
+/target/
+**/*.rs.bk
+
+# Coverage / profiling
+*.profraw
+*.profdata
+lcov.info
+/coverage/
+
+# Snapshot tests (insta): pending snapshots, not yet accepted
+*.snap.new
+*.pending-snap
+
+# Compile-fail tests (trybuild): new outputs waiting for review
+**/wip/
+
+# Local env (database URLs, secrets)
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
