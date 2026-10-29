@@ -1,0 +1,31 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2024"
+rust-version = "1.99"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/mehranTaslimi/sqlwright"
+
+[workspace.dependencies]
+sqlwright-core = { path = "crates/sqlwright-core", version = "0.0.1" }
+sqlwright-macros = { path = "crates/sqlwright-macros", version = "0.0.1" }
+sqlwright-postgres = { path = "crates/sqlwright-postgres", version = "0.0.1" }
+
+# external
+sqlx = { version = "0.9", default-features = false }
+syn = { version = "3", features = ["full"] }
+quote = "1"
+proc-macro2 = "1"
+thiserror = "2"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+unreachable_pub = "warn"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
