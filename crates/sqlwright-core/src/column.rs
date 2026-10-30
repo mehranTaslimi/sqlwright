@@ -33,7 +33,7 @@ impl<T: Table, S> Column<T, S> {
 
     #[must_use]
     pub const fn table_name(&self) -> &'static str {
-        T::NAME
+        T::DEF.name
     }
 }
 
@@ -47,6 +47,6 @@ impl<T, S> Copy for Column<T, S> {}
 
 impl<T: Table, S> fmt::Debug for Column<T, S> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}.{}", T::NAME, self.name)
+        write!(f, "{}.{}", T::DEF.name, self.name)
     }
 }

@@ -1,0 +1,8 @@
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blog
+    ports:
+      - "5433:5432"

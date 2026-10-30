@@ -74,13 +74,28 @@ pub fn table(args: TokenStream, item: TokenStream) -> TokenStream {
     let field_types: Vec<&Type> = fields.named.iter().map(|f| &f.ty).collect();
     let column_names: Vec<String> = field_idents.iter().map(ToString::to_string).collect();
 
+    let mut column_defs = Vec::new();
+
+    for (name, ty) in column_names.iter().zip(&field_types) {
+        column_defs.push(quote! {
+            ::sqlwright::ColumnDef {
+                name: #name,
+                sql_type: <#backend as ::sqlwright::HasSqlType<#ty>>::TYPE_NAME,
+                nullable: <#backend as ::sqlwright::HasSqlType<#ty>>::NULLABLE,
+            }
+        });
+    }
+
     quote! {
         #[derive(Clone, Copy, Debug)]
         pub struct #ident;
 
         impl ::sqlwright::Table for #ident {
             type Backend = #backend;
-            const NAME: &'static str = #name;
+            const DEF: ::sqlwright::TableDef = ::sqlwright::TableDef {
+                name: #name,
+                columns: &[#(#column_defs),*],
+            };
         }
 
 

@@ -11,10 +11,6 @@ repository.workspace = true
 default = []
 postgres = ["dep:sqlwright-postgres"]
 
-[[example]]
-name = "macro_demo"
-required-features = ["postgres"]
-
 [dependencies]
 sqlwright-core.workspace = true
 sqlwright-macros.workspace = true

@@ -1,7 +1,7 @@
-pub use sqlwright_core::*;
-pub use sqlwright_macros::*;
+pub use sqlwright_core::{
+    Backend, Column, ColumnDef, HasSqlType, SqlType, Table, TableDef, generate, types,
+};
+pub use sqlwright_macros::table;
 
 #[cfg(feature = "postgres")]
-pub mod pg {
-    pub use sqlwright_postgres::*;
-}
+pub use sqlwright_postgres as pg;

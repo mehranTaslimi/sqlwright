@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/*"]
+members = ["crates/*", "examples/*"]
 
 [workspace.package]
 version = "0.0.1"
@@ -13,6 +13,7 @@ repository = "https://github.com/mehranTaslimi/sqlwright"
 sqlwright-core = { path = "crates/sqlwright-core", version = "0.0.1" }
 sqlwright-macros = { path = "crates/sqlwright-macros", version = "0.0.1" }
 sqlwright-postgres = { path = "crates/sqlwright-postgres", version = "0.0.1" }
+sqlwright = { path = "crates/sqlwright", version = "0.0.1" }
 
 # external
 sqlx = { version = "0.9", default-features = false }
