@@ -1,5 +1,5 @@
 pub use sqlwright_core::{
-    Backend, Column, ColumnDef, HasSqlType, SqlType, Table, TableDef, generate, types,
+    Backend, Column, ColumnDef, HasSqlType, Table, TableDef, generate, types,
 };
 pub use sqlwright_macros::table;
 

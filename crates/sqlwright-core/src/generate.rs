@@ -1,17 +1,23 @@
-use std::path::Path;
+use std::{io, path::Path};
 
-use crate::{Backend, TableDef, snapshot::Snapshot};
+use crate::{Backend, TableDef, diff::diff, snapshot::Snapshot};
 
 pub fn generate<B: Backend>(
     _pool: &sqlx::Pool<B::Database>,
     root: &Path,
     out: &Path,
     tables: &[TableDef],
-) {
-    let snapshot = Snapshot::new(&root.to_path_buf());
-    let old = snapshot.load();
-    let new = snapshot.from(&tables);
-    snapshot.save(&new);
-}
+) -> io::Result<()> {
+    let old = Snapshot::load_or_init(root)?;
+    let new = Snapshot::from(tables);
 
-fn diff_snapshot(root: &Path) {}
+    let mut sql = vec![];
+
+    for change in diff(&old, &new) {
+        sql.push(B::render(&change));
+    }
+
+    println!("{:#?}", sql);
+
+    Ok(())
+}

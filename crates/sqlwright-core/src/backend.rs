@@ -1,47 +1,26 @@
 use crate::{
-    ColumnDef, TableDef,
+    ColumnSnapshot,
+    change::Change,
+    snapshot::TableSnapshot,
     types::{Nullable, SqlType},
 };
 
 pub trait Backend: Sized + Send + Sync + 'static {
     type Database: sqlx::Database;
 
-    fn quote_ident(name: &str) -> String {
-        format!("\"{}\"", name)
+    fn render(change: &Change<'_>) -> String {
+        use Change::*;
+
+        match change {
+            CreateTable(t) => Self::create_table(t),
+            _ => "".to_owned(),
+        }
     }
 
-    fn create_tables(tables: &[TableDef]) -> String {
-        tables
-            .iter()
-            .map(Self::create_table)
-            .collect::<Vec<_>>()
-            .join("\n")
-    }
-
-    fn create_table(table: &TableDef) -> String {
-        format!(
-            "create table if not exists {} (\n{}\n);",
-            &Self::quote_ident(table.name),
-            Self::create_columns(table.columns)
-        )
-    }
-
-    fn create_columns(columns: &'static [ColumnDef]) -> String {
-        columns
-            .iter()
-            .map(Self::create_column)
-            .collect::<Vec<_>>()
-            .join(",\n")
-    }
-
-    fn create_column(column: &'static ColumnDef) -> String {
-        format!(
-            "  {} {}{}",
-            Self::quote_ident(column.name),
-            column.sql_type,
-            if column.nullable { "" } else { " not null" },
-        )
-    }
+    fn quote_ident(name: &str) -> String;
+    fn create_table(table: &TableSnapshot) -> String;
+    fn create_columns(columns: &[ColumnSnapshot]) -> String;
+    fn create_column(column: &ColumnSnapshot) -> String;
 }
 
 #[diagnostic::on_unimplemented(

@@ -38,7 +38,7 @@ async fn main() -> Result<(), sqlx::Error> {
         ],
         pool,
         out : "migrations"
-    };
+    }?;
 
     Ok(())
 }

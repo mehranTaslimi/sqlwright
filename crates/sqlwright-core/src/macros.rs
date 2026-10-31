@@ -17,7 +17,7 @@ macro_rules! sql_types {
         $(
             pub enum $name {}
 
-            impl $crate::SqlType for $name {}
+            impl $crate::types::SqlType for $name {}
         )*
     };
     ($backend:ty { $( $name:ident => $sql:literal ),* $(,)? }) => {
