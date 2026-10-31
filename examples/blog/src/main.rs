@@ -8,7 +8,7 @@ use sqlx::postgres::PgPoolOptions;
 
 #[table(name = "users", backend = Pg)]
 pub struct User {
-    id: BigInt,
+    id: Nullable<BigInt>,
     name: Text,
     bio: Nullable<Text>,
 }
@@ -32,8 +32,12 @@ async fn main() -> Result<(), sqlx::Error> {
     println!("connected: {version}");
 
     generate! {
-        User,
-        Post
+        tables: [
+            User,
+            Post
+        ],
+        pool,
+        out : "migrations"
     };
 
     Ok(())

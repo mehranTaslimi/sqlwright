@@ -3,6 +3,7 @@ mod column;
 mod generate;
 mod macros;
 mod schema;
+mod snapshot;
 mod table;
 pub mod types;
 

@@ -10,6 +10,14 @@ pub trait Backend: Sized + Send + Sync + 'static {
         format!("\"{}\"", name)
     }
 
+    fn create_tables(tables: &[TableDef]) -> String {
+        tables
+            .iter()
+            .map(Self::create_table)
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
+
     fn create_table(table: &TableDef) -> String {
         format!(
             "create table if not exists {} (\n{}\n);",
@@ -21,16 +29,18 @@ pub trait Backend: Sized + Send + Sync + 'static {
     fn create_columns(columns: &'static [ColumnDef]) -> String {
         columns
             .iter()
-            .map(|c| {
-                format!(
-                    "  {} {}{}",
-                    Self::quote_ident(c.name),
-                    c.sql_type,
-                    if c.nullable { "" } else { " not null" },
-                )
-            })
+            .map(Self::create_column)
             .collect::<Vec<_>>()
             .join(",\n")
+    }
+
+    fn create_column(column: &'static ColumnDef) -> String {
+        format!(
+            "  {} {}{}",
+            Self::quote_ident(column.name),
+            column.sql_type,
+            if column.nullable { "" } else { " not null" },
+        )
     }
 }
 

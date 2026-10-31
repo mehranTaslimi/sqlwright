@@ -29,10 +29,35 @@ macro_rules! sql_types {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! generate {
-    { $first:ty $(, $rest:ty)* $(,)? } => {
-        $crate::generate::<<$first as $crate::Table>::Backend>(&[
-            <$first as $crate::Table>::DEF,
-            $( <$rest as $crate::Table>::DEF ),*
-        ])
+    { tables: [ $first:ty $(, $rest:ty)* $(,)? ], pool: $pool:expr, out: $out:expr $(,)? } => {
+        $crate::generate::<<$first as $crate::Table>::Backend>(
+            &$pool,
+            ::std::path::Path::new(env!("CARGO_MANIFEST_DIR")),
+            ::std::path::Path::new($out),
+            &[
+                <$first as $crate::Table>::DEF,
+                $( <$rest as $crate::Table>::DEF ),*
+            ],
+        )
+    };
+    { tables: [ $($table:ty),+ $(,)? ], pool: $pool:expr $(,)? } => {
+        $crate::generate! { tables: [ $($table),+ ], pool: $pool, out: "migrations" }
+    };
+    { tables: [ $($table:ty),+ $(,)? ], $pool:ident $(, $($rest:tt)*)? } => {{
+        $crate::__expect_pool!($pool);
+        $crate::generate! { tables: [ $($table),+ ], pool: $pool $(, $($rest)*)? }
+    }};
+}
+
+#[macro_export]
+#[doc(hidden)]
+macro_rules! __expect_pool {
+    (pool) => {};
+    ($other:ident) => {
+        compile_error!(concat!(
+            "expected `pool` or `pool: ",
+            stringify!($other),
+            "`"
+        ))
     };
 }
