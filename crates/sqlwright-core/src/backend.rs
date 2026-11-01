@@ -12,12 +12,53 @@ pub trait Backend: Sized + Send + Sync + 'static {
 
         match change {
             CreateTable(t) => Self::create_table(t),
-            _ => "".to_owned(),
+            DropTable { name } => Self::drop_table(name),
+            AddColumn { .. }
+            | DropColumn { .. }
+            | SetNotNull { .. }
+            | DropNotNull { .. }
+            | AlterColumnType { .. }
+            | AddPrimaryKey { .. }
+            | DropPrimaryKey { .. }
+            | AddIdentity { .. }
+            | DropIdentity { .. }
+            | SetDefault { .. }
+            | DropDefault { .. }
+            | AddUnique { .. }
+            | DropUnique { .. }
+            | AddForeignKey { .. }
+            | DropForeignKey { .. }
+            | CreateIndex { .. }
+            | DropIndex { .. }
+            | CreateEnum { .. }
+            | DropEnum { .. }
+            | AddEnumValue { .. }
+            | AddCheck { .. }
+            | DropCheck { .. }
+            | CreateSchema { .. }
+            | DropSchema { .. }
+            | CreateSequence { .. }
+            | DropSequence { .. }
+            | CreateView { .. }
+            | DropView { .. }
+            | DropGenerated { .. }
+            | SetTableComment { .. }
+            | SetColumnComment { .. }
+            | RenameTable { .. }
+            | RenameColumn { .. }
+            | RenameConstraint { .. }
+            | RenameIndex { .. }
+            | RenameEnum { .. }
+            | RenameEnumValue { .. }
+            | RenameSchema { .. }
+            | RenameSequence { .. }
+            | RenameView { .. } => unimplemented!("render {change:?}"),
         }
     }
 
     fn quote_ident(name: &str) -> String;
     fn create_table(table: &TableSnapshot) -> String;
+    fn drop_table(name: &str) -> String;
 }
 
 #[diagnostic::on_unimplemented(

@@ -10,12 +10,12 @@ impl Backend for Pg {
     type Database = sqlx::Postgres;
 
     fn quote_ident(name: &str) -> String {
-        format!("\"{}\"", name)
+        format!("\"{}\"", name.replace('"', "\"\""))
     }
 
     fn create_table(table: &TableSnapshot) -> String {
         format!(
-            "create table if not exists {} (\n{}\n);",
+            "create table {} (\n{}\n);",
             Self::quote_ident(&table.name),
             table
                 .columns
@@ -31,6 +31,10 @@ impl Backend for Pg {
                 .collect::<Vec<_>>()
                 .join(",\n")
         )
+    }
+
+    fn drop_table(name: &str) -> String {
+        format!("drop table {};", Self::quote_ident(name))
     }
 }
 
