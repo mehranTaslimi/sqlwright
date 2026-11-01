@@ -21,6 +21,11 @@ pub struct Post {
     body: Text,
 }
 
+#[table(name = "authors", backend = Pg)]
+pub struct Author {
+    name: Text,
+}
+
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
     let url = std::env::var("DATABASE_URL")
@@ -34,7 +39,8 @@ async fn main() -> Result<(), sqlx::Error> {
     generate! {
         tables: [
             User,
-            Post
+            Post,
+            Author
         ],
         pool,
         out : "migrations"

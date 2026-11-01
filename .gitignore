@@ -31,3 +31,8 @@ lcov.info
 
 # graphify knowledge graph output
 /graphify-out/
+
+# sqlwright output from running the examples (playground state, not source)
+/migrations/
+/examples/*/migrations/
+/examples/*/.sqlwright/

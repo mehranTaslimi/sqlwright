@@ -1,5 +1,5 @@
 use sqlwright_core::types::{BigInt, Bool, Double, Int, Real, SmallInt, Text};
-use sqlwright_core::{Backend, ColumnSnapshot, TableSnapshot, impl_sql_types};
+use sqlwright_core::{Backend, TableSnapshot, impl_sql_types};
 
 pub mod types;
 
@@ -16,25 +16,20 @@ impl Backend for Pg {
     fn create_table(table: &TableSnapshot) -> String {
         format!(
             "create table if not exists {} (\n{}\n);",
-            table.name,
-            Self::create_columns(&table.columns)
-        )
-    }
-
-    fn create_columns(columns: &[ColumnSnapshot]) -> String {
-        columns
-            .iter()
-            .map(Self::create_column)
-            .collect::<Vec<_>>()
-            .join(",\n")
-    }
-
-    fn create_column(column: &ColumnSnapshot) -> String {
-        format!(
-            "  {} {}{}",
-            Self::quote_ident(&column.name),
-            column.sql_type,
-            if column.nullable { "" } else { " not null" },
+            Self::quote_ident(&table.name),
+            table
+                .columns
+                .iter()
+                .map(|column| {
+                    format!(
+                        "   {} {}{}",
+                        Self::quote_ident(&column.name),
+                        column.sql_type,
+                        if column.nullable { "" } else { " not null" },
+                    )
+                })
+                .collect::<Vec<_>>()
+                .join(",\n")
         )
     }
 }

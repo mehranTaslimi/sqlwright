@@ -4,6 +4,7 @@ mod column;
 mod diff;
 mod generate;
 mod macros;
+mod migration;
 mod schema;
 mod snapshot;
 mod table;

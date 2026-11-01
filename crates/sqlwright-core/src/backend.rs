@@ -1,5 +1,4 @@
 use crate::{
-    ColumnSnapshot,
     change::Change,
     snapshot::TableSnapshot,
     types::{Nullable, SqlType},
@@ -19,8 +18,6 @@ pub trait Backend: Sized + Send + Sync + 'static {
 
     fn quote_ident(name: &str) -> String;
     fn create_table(table: &TableSnapshot) -> String;
-    fn create_columns(columns: &[ColumnSnapshot]) -> String;
-    fn create_column(column: &ColumnSnapshot) -> String;
 }
 
 #[diagnostic::on_unimplemented(

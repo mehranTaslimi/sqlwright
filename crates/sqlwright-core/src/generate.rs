@@ -1,6 +1,6 @@
 use std::{io, path::Path};
 
-use crate::{Backend, TableDef, diff::diff, snapshot::Snapshot};
+use crate::{Backend, TableDef, diff::diff, migration, snapshot::Snapshot};
 
 pub fn generate<B: Backend>(
     _pool: &sqlx::Pool<B::Database>,
@@ -11,13 +11,14 @@ pub fn generate<B: Backend>(
     let old = Snapshot::load_or_init(root)?;
     let new = Snapshot::from(tables);
 
-    let mut sql = vec![];
+    let sql = diff(&old, &new).iter().map(B::render).collect::<Vec<_>>();
 
-    for change in diff(&old, &new) {
-        sql.push(B::render(&change));
+    if sql.len() == 0 {
+        return Ok(());
     }
 
-    println!("{:#?}", sql);
+    migration::write(out, "file", &sql.join("\n\n"))?;
+    new.save(root)?;
 
     Ok(())
 }
